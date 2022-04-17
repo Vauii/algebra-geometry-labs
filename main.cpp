@@ -307,18 +307,18 @@ public:
     }
 
 
-    friend bool operator== (const Matrix &a, const Matrix &b){
+    bool operator== (const Matrix &other){
 
-        if ((a.rows != b.rows) || (a.columns != b.columns)){
+        if ((rows != other.rows) || (columns != other.columns)){
 
             return false;
 
         }
 
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
 
-                if (a[i][j] != b[i][j])
+                if (values[i][j] != other[i][j])
                     return false;
 
             }
@@ -329,12 +329,12 @@ public:
     }
 
 
-    friend bool operator== (const Matrix &a, const T &value){
+    bool operator== (const T &value){
 
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
 
-                if (a[i][j] != value)
+                if (values[i][j] != value)
                     return false;
 
             }
@@ -345,34 +345,18 @@ public:
     }
 
 
-    friend bool operator== (const T &value, const Matrix &a){
+    bool operator!= (const Matrix &other){
 
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
-
-                if (a[i][j] != value)
-                    return false;
-
-            }
-        }
-
-        return true;
-
-    }
-
-
-    friend bool operator!= (const Matrix &a, const Matrix &b){
-
-        if ((a.rows != b.rows) || (a.columns != b.columns)){
+        if ((rows != other.rows) || (columns != other.columns)){
 
             return true;
 
         }
 
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
 
-                if (a[i][j] != b[i][j])
+                if (values[i][j] != other[i][j])
                     return true;
 
             }
@@ -383,28 +367,12 @@ public:
     }
 
 
-    friend bool operator!= (const Matrix &a, const T &value){
+    bool operator!= (const T &value){
 
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
 
-                if (a[i][j] != value)
-                    return true;
-
-            }
-        }
-
-        return false;
-
-    }
-
-
-    friend bool operator!= (const T &value, const Matrix &a){
-
-        for(int i = 0; i < a.rows; i++){
-            for(int j = 0; j < a.columns; j++){
-
-                if (a[i][j] != value)
+                if (values[i][j] != value)
                     return true;
 
             }

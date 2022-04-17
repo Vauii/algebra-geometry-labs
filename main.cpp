@@ -361,6 +361,60 @@ public:
     }
 
 
+    friend bool operator!= (const Matrix &a, const Matrix &b){
+
+        if ((a.rows != b.rows) || (a.columns != b.columns)){
+
+            return true;
+
+        }
+
+        for(int i = 0; i < a.rows; i++){
+            for(int j = 0; j < a.columns; j++){
+
+                if (a[i][j] != b[i][j])
+                    return true;
+
+            }
+        }
+
+        return false;
+
+    }
+
+
+    friend bool operator!= (const Matrix &a, const T &value){
+
+        for(int i = 0; i < a.rows; i++){
+            for(int j = 0; j < a.columns; j++){
+
+                if (a[i][j] != value)
+                    return true;
+
+            }
+        }
+
+        return false;
+
+    }
+
+
+    friend bool operator!= (const T &value, const Matrix &a){
+
+        for(int i = 0; i < a.rows; i++){
+            for(int j = 0; j < a.columns; j++){
+
+                if (a[i][j] != value)
+                    return true;
+
+            }
+        }
+
+        return false;
+
+    }
+
+
     Matrix transpose(){
 
         Matrix transposed_matrix = Matrix(columns, rows);
@@ -518,4 +572,6 @@ int main(){
     z[2][2] = 3;
     z[3][3] = 3;
     cout << z.calc_det() << endl;
+
+    cout << (a != c) << endl;
 }

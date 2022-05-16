@@ -75,10 +75,8 @@ public:
 
     ~Hamming(){
 
-        cout << 1 << endl;
         delete &ver_matrix;
         delete &gen_matrix;
-        cout << 2;
 
     }
 

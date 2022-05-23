@@ -5,21 +5,21 @@ using namespace std;
 
 int main(){
 
-    Hamming code = Hamming(3, 4);
+    Hamming code = Hamming(2, 4);
 
-    for(int i = 0; i < code.ver_matrix.rows; i++){
-        for(int j = 0; j < code.ver_matrix.columns; j++)
+    for(int i = 0; i < code.verification_matrix.rows; i++){
+        for(int j = 0; j < code.verification_matrix.columns; j++)
         {
-            cout << code.ver_matrix[i][j] << " ";
+            cout << code.verification_matrix[i][j] << " ";
         }
         cout << endl;
     }
     cout << endl;
 
-    for(int i = 0; i < code.gen_matrix.rows; i++){
-        for(int j = 0; j < code.gen_matrix.columns; j++)
+    for(int i = 0; i < code.generating_matrix.rows; i++){
+        for(int j = 0; j < code.generating_matrix.columns; j++)
         {
-            cout << code.gen_matrix[i][j] << " ";
+            cout << code.generating_matrix[i][j] << " ";
         }
         cout << endl;
     }

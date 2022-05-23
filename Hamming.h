@@ -10,20 +10,23 @@ class Hamming{
 
 public:
 
-    Matrix<int> ver_matrix;
-    Matrix<int> gen_matrix;
+    Matrix<int> verification_matrix;
+    Matrix<int> generating_matrix;
+    int p;
 
 
-    Hamming(int p, int r): ver_matrix(r, (pow(p, r) - 1) / (p - 1), 0),
-                           gen_matrix(((pow(p, r) - 1) / (p - 1)) - r,(pow(p, r) - 1) / (p - 1), 0){
+    Hamming(int input_p, int r): verification_matrix(r, (pow(input_p, r) - 1) / (input_p - 1), 0),
+                                 generating_matrix(((pow(input_p, r) - 1) / (input_p - 1)) - r, (pow(input_p, r) - 1) / (input_p - 1), 0){
+
+        p = input_p;
 
         for (int i = 0; i < r; i++){
 
-            ver_matrix[i][ver_matrix.columns - r + i] = 1;
+            verification_matrix[i][verification_matrix.columns - r + i] = 1;
 
         }
 
-        int * temp_column = new int[r], current_index = ver_matrix.columns - r;
+        int * temp_column = new int[r], current_index = verification_matrix.columns - r;
         for (int i = 0; i < r; i++) temp_column[i] = 0;
 
         while(next(temp_column, p, r)){
@@ -44,7 +47,7 @@ public:
 
                     for (int k = 0; k < r; k++){
 
-                        ver_matrix[k][current_index-1] = temp_column[k];
+                        verification_matrix[k][current_index - 1] = temp_column[k];
 
                     }
                     current_index--;
@@ -57,15 +60,15 @@ public:
 
 
 
-        for (int i = 0; i < gen_matrix.rows; i++){
+        for (int i = 0; i < generating_matrix.rows; i++){
 
-            gen_matrix[i][i] = 1;
+            generating_matrix[i][i] = 1;
 
         }
-        for (int i = 0; i < gen_matrix.rows; i++){
-            for (int j = gen_matrix.rows; j < gen_matrix.columns; j++){
+        for (int i = 0; i < generating_matrix.rows; i++){
+            for (int j = generating_matrix.rows; j < generating_matrix.columns; j++){
 
-                gen_matrix[i][j] = (p - ver_matrix[j - gen_matrix.rows][i]) % p;
+                generating_matrix[i][j] = (p - verification_matrix[j - generating_matrix.rows][i]) % p;
 
             }
         }
@@ -75,8 +78,8 @@ public:
 
     ~Hamming(){
 
-        delete &ver_matrix;
-        delete &gen_matrix;
+        delete &verification_matrix;
+        delete &generating_matrix;
 
     }
 
@@ -102,13 +105,13 @@ public:
 
     bool column_checkout(const int * temp, int index, int p) const{
 
-        int *prev = new int[ver_matrix.columns], right_border = ver_matrix.columns, col_len = ver_matrix.rows;
+        int *prev = new int[verification_matrix.columns], right_border = verification_matrix.columns, col_len = verification_matrix.rows;
 
         for (int i = index; i < right_border; i++){
 
             for (int k = 0; k < col_len; k++){
 
-                prev[k] = ver_matrix[k][i];
+                prev[k] = verification_matrix[k][i];
 
             }
 
@@ -140,6 +143,75 @@ public:
         return temp;
 
     }
+
+
+    Matrix<int> decode(Matrix<int> x){
+
+        int r = verification_matrix.rows, n = verification_matrix.columns;
+        int *vector = new int[r];
+
+        for (int i = 0; i < r; i++){
+            for (int j = 0; j < n; j++){
+
+                vector[i] = x[0][j] * verification_matrix[i][j];
+
+            }
+        }
+
+        bool no_mistakes = true;
+        for (int j = 0; j < n; j++){
+            if (vector[j] != 0){
+
+                no_mistakes = false;
+                break;
+
+            }
+        }
+
+        if (!no_mistakes){
+
+            int mistake_index = -1, correct_alpha;
+            for (int i = 0; i < n; i++){
+                for (int alpha = 1; alpha < p; alpha++){
+
+                    bool equal = true;
+                    for (int k = 0; k < r; k++){
+                        if (vector[k] != alpha * verification_matrix[k][i]){
+
+                            equal = false;
+                            break;
+
+                        }
+                    }
+
+                    if (equal){
+
+                        mistake_index = i;
+                        correct_alpha = alpha;
+                        break;
+
+                    }
+
+                }
+
+                if (mistake_index != -1) break;
+
+            }
+
+            x[0][mistake_index] = x[0][mistake_index] - correct_alpha;
+
+        }
+
+        Matrix<int> u = Matrix<int>(1, generating_matrix.rows);
+        for (int j = 0; j < generating_matrix.rows; j++) {
+            u[0][j] = x[0][j];
+        }
+
+        return u;
+
+    }
+
+
 
 };
 

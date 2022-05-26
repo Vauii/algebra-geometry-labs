@@ -151,16 +151,17 @@ public:
         int *vector = new int[r];
 
         for (int i = 0; i < r; i++){
+            vector[i] = 0;
             for (int j = 0; j < n; j++){
 
-                vector[i] = x[0][j] * verification_matrix[i][j];
+                vector[i] += x[0][j] * verification_matrix[i][j];
 
             }
         }
 
         bool no_mistakes = true;
-        for (int j = 0; j < n; j++){
-            if (vector[j] != 0){
+        for (int i = 0; i < r; i++){
+            if (vector[i] != 0){
 
                 no_mistakes = false;
                 break;

@@ -154,7 +154,7 @@ public:
             vector[i] = 0;
             for (int j = 0; j < n; j++){
 
-                vector[i] += x[0][j] * verification_matrix[i][j];
+                vector[i] += (x[0][j] * verification_matrix[i][j]) % p;
 
             }
         }
@@ -177,7 +177,7 @@ public:
 
                     bool equal = true;
                     for (int k = 0; k < r; k++){
-                        if (vector[k] != alpha * verification_matrix[k][i]){
+                        if ((vector[k] != ((alpha * verification_matrix[k][i]) % p)){
 
                             equal = false;
                             break;
